@@ -34,7 +34,7 @@ Then go back to your cmd prompt you opened expo in and run:
 a
 ```
 
-The app will build the application and it will come up on your emulator, at this point you can interact with the application as desired.
+The application will build and come up on your emulator, at this point you can interact with the application as desired.
 
 ## Running the tests
 
