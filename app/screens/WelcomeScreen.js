@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, View, Image, Text } from "react-native";
 
 import Button from "../components/Button";
 
-function WelcomeScreen(props) {
+function WelcomeScreen({ navigation }) {
   return (
     <ImageBackground
       blurRadius={5}
@@ -15,11 +15,14 @@ function WelcomeScreen(props) {
           style={styles.logo}
           source={require("../assets/FlutterLogo.png")}
         />
-        {/* <Text style={styles.tagline}>Flutter</Text> */}
       </View>
       <View style={styles.buttonsContainer}>
-        <Button title="Login" />
-        <Button title="Register" color="secondary" />
+        <Button title="Login" onPress={() => navigation.navigate("Login")} />
+        <Button
+          title="Register"
+          color="secondary"
+          onPress={() => navigation.navigate("Register")}
+        />
       </View>
     </ImageBackground>
   );
@@ -44,11 +47,6 @@ const styles = StyleSheet.create({
     top: 70,
     alignItems: "center",
     width: "100%",
-  },
-  tagline: {
-    fontSize: 25,
-    fontWeight: "600",
-    paddingVertical: 20,
   },
 });
 
