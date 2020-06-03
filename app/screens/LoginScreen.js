@@ -39,7 +39,7 @@ export default class Login extends Component {
             email: "",
             password: "",
           });
-          this.props.navigation.navigate("Home");
+          this.props.navigation.navigate("HomeLogged");
         })
         .catch((error) => this.setState({ errorMessage: error.message }));
     }
