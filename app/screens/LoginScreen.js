@@ -1,86 +1,82 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Alert, ActivityIndicator } from "react-native";
 import firebase from "../../database/firebase";
+import * as Yup from "yup";
+import { Formik } from "formik";
 
-import TextInput from "../components/TextInput";
 import AppButton from "../components/Button";
+import TextInput from "../components/TextInput";
+import ErrorMessage from "../components/ErrorMessage";
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required().email().label("Email"),
+  password: Yup.string().required().min(6).label("Password"),
+});
 
 export default class Login extends Component {
   constructor() {
     super();
-    this.state = {
-      email: "",
-      password: "",
-      isLoading: false,
-    };
   }
 
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-  };
-
-  userLogin = () => {
-    if (this.state.email === "" && this.state.password === "") {
-      Alert.alert("Enter details to signin!");
-    } else {
-      this.setState({
-        isLoading: true,
-      });
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then((res) => {
-          console.log(res);
-          console.log("User logged-in successfully!");
-          this.setState({
-            isLoading: false,
-            email: "",
-            password: "",
-          });
-          this.props.navigation.navigate("HomeLogged");
-        })
-        .catch((error) => this.setState({ errorMessage: error.message }));
-    }
-  };
-
   render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
-        </View>
-      );
-    }
     return (
-      <View style={styles.container}>
-        <TextInput
-          autoCorrect={false}
-          icon="account"
-          name="name"
-          placeholder="Email"
-          value={this.state.email}
-          onChangeText={(val) => this.updateInputVal(val, "email")}
-        />
-        <TextInput
-          autoCorrect={false}
-          icon="account"
-          name="name"
-          placeholder="Password"
-          value={this.state.password}
-          onChangeText={(val) => this.updateInputVal(val, "password")}
-          maxLength={15}
-          secureTextEntry={true}
-        />
-        <AppButton title="Sign in" onPress={() => this.userLogin()} />
-
-        <AppButton
-          onPress={() => this.props.navigation.navigate("Register")}
-          color="secondary"
-          title="Need to register? click here"
-        ></AppButton>
-      </View>
+      <Formik
+        initialValues={{ name: "", email: "", password: "" }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          firebase
+            .auth()
+            .signInWithEmailAndPassword(values.email, values.password)
+            .then((res) => {
+              console.log(res);
+              this.props.navigation.navigate("HomeLogged");
+              console.log("User logged-in successfully!");
+            });
+        }}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          touched,
+          errors,
+        }) => (
+          <View style={styles.container}>
+            <TextInput
+              autoCorrect={false}
+              icon="account"
+              name="name"
+              placeholder="Email"
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
+              value={values.email}
+            />
+            <ErrorMessage error={errors["email"]} visible={touched["email"]} />
+            <TextInput
+              autoCorrect={false}
+              icon="account"
+              name="name"
+              placeholder="Password"
+              onChangeText={handleChange("password")}
+              onBlur={handleBlur("password")}
+              value={values.password}
+              maxLength={15}
+              secureTextEntry={true}
+            />
+            <ErrorMessage
+              error={errors["password"]}
+              visible={touched["password"]}
+            />
+            <AppButton title="Sign in" onPress={handleSubmit} />
+            <AppButton
+              onPress={() => this.props.navigation.navigate("Register")}
+              color="secondary"
+              title="Need to register? click here"
+            ></AppButton>
+          </View>
+        )}
+      </Formik>
     );
   }
 }
