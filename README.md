@@ -9,16 +9,21 @@ This will be a cross-platform app made with React Native, which will allow users
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
-### Prerequisites
+### Installing
 
 What you will need to run this application
+
+```
+git clone https://github.com/JesseHarasym/flutter.git
+cd FlightApp
+```
 
 ```
 npm install
 npm i -g expo-cli
 ```
 
-### Installing
+### Running
 
 After installing the prerequests run the following:
 
@@ -26,8 +31,8 @@ After installing the prerequests run the following:
 expo start
 ```
 
-Your expo DevTools will run in the browser. Your emulator of choice will dictate what you do next. 
-For Android open Android Studio, go to AVD and run your desired android API.
+Your expo DevTools will run in the browser, your emulator of choice will dictate what you do next; 
+for Android open Android Studio, go to AVD and run your desired android API.
 Then go back to your cmd prompt you opened expo in and run:
 
 ```
@@ -46,6 +51,10 @@ This application is not ready for deployment.
 * Expo
 * Formik
 * Yup
+
+## Build Plan
+
+
 
 ## Authors
 
