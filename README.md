@@ -3,11 +3,11 @@
 
 # Flutter: A way to find the cheapest flights
 
-This will be a cross-platform app made with React Native, which will Llow users to register, login and use the search function to find the flight destination on the date of their choice. The user will be presented with a screen indicating the lowest cost available for the searched flight, and a calender indicating how the price compares to other flights for the same destination on different dates.
+This will be a cross-platform app made with React Native, which will allow users to register, login and use the search function to find the flight destination on the date of their choice. The user will be presented with a screen indicating the lowest cost available for the searched flight, and a calender indicating how the price compares to other flights for the same destination on different dates.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
 
@@ -36,18 +36,6 @@ a
 
 The application will build and come up on your emulator, at this point you can interact with the application as desired.
 
-## Running the tests
-
-There is currently no testing set up for this application.
-
-### Break down into end to end tests
-
-N/A
-
-### And coding style tests
-
-N/A
-
 ## Deployment
 
 This application is not ready for deployment.
@@ -63,6 +51,3 @@ This application is not ready for deployment.
 
 * **Jesse Harasym** - *Initial work* - (https://github.com/JesseHarasym)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
