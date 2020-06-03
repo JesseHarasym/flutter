@@ -1,64 +1,92 @@
-import React from "react";
-import { StyleSheet, Image, Text } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-// import * as Yup from "yup";
+import React, { Component } from "react";
+import { StyleSheet, View, Alert, ActivityIndicator } from "react-native";
+import firebase from "../../database/firebase";
 
-// import Screen from "../components/Screen";
-// import { Form, FormField, SubmitButton } from "../components/forms";
+import TextInput from "../components/TextInput";
+import AppButton from "../components/Button";
 
-// const validationSchema = Yup.object().shape({
-//   email: Yup.string().required().email().label("Email"),
-//   password: Yup.string().required().min(4).label("Password"),
-// });
+export default class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email: "",
+      password: "",
+      isLoading: false,
+    };
+  }
 
-const Stack = createStackNavigator();
+  updateInputVal = (val, prop) => {
+    const state = this.state;
+    state[prop] = val;
+    this.setState(state);
+  };
 
-function LoginScreen(props) {
-  return <Text></Text>;
-  // <Screen style={styles.container}>
-  //   <Image style={styles.logo} source={require("../assets/logo-red.png")} />
+  userLogin = () => {
+    if (this.state.email === "" && this.state.password === "") {
+      Alert.alert("Enter details to signin!");
+    } else {
+      this.setState({
+        isLoading: true,
+      });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then((res) => {
+          console.log(res);
+          console.log("User logged-in successfully!");
+          this.setState({
+            isLoading: false,
+            email: "",
+            password: "",
+          });
+          this.props.navigation.navigate("Home");
+        })
+        .catch((error) => this.setState({ errorMessage: error.message }));
+    }
+  };
 
-  //   <Form
-  //     initialValues={{ email: "", password: "" }}
-  //     onSubmit={(values) => console.log(values)}
-  //     validationSchema={validationSchema}
-  //   >
-  //     <FormField
-  //       autoCapitalize="none"
-  //       autoCorrect={false}
-  //       icon="email"
-  //       keyboardType="email-address"
-  //       name="email"
-  //       placeholder="Email"
-  //       textContentType="emailAddress"
-  //     />
-  //     <FormField
-  //       autoCapitalize="none"
-  //       autoCorrect={false}
-  //       icon="lock"
-  //       name="password"
-  //       placeholder="Password"
-  //       secureTextEntry
-  //       textContentType="password"
-  //     />
-  //     <SubmitButton title="Login" />
-  //   </Form>
-  // </Screen>
-  //   );
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E" />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.container}>
+        <TextInput
+          autoCorrect={false}
+          icon="account"
+          name="name"
+          placeholder="Email"
+          value={this.state.email}
+          onChangeText={(val) => this.updateInputVal(val, "email")}
+        />
+        <TextInput
+          autoCorrect={false}
+          icon="account"
+          name="name"
+          placeholder="Password"
+          value={this.state.password}
+          onChangeText={(val) => this.updateInputVal(val, "password")}
+          maxLength={15}
+          secureTextEntry={true}
+        />
+        <AppButton title="Sign in" onPress={() => this.userLogin()} />
+
+        <AppButton
+          onPress={() => this.props.navigation.navigate("Register")}
+          color="secondary"
+          title="Need to register? click here"
+        ></AppButton>
+      </View>
+    );
+  }
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 10,
-//   },
-//   logo: {
-//     width: 80,
-//     height: 80,
-//     alignSelf: "center",
-//     marginTop: 50,
-//     marginBottom: 20,
-//   },
-// });
-
-export default LoginScreen;
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+});
