@@ -14,6 +14,11 @@ These instructions will get you a copy of the project up and running on your loc
 What you will need to run this application
 
 ```
+git clone https://github.com/JesseHarasym/flutter.git
+cd FlightApp
+```
+
+```
 npm install
 npm i -g expo-cli
 ```
