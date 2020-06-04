@@ -1,41 +1,53 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
+import firebase from "../../database/firebase";
 
-import Screen from "../components/Screen";
 import AppButton from "../components/Button";
-import colors from "../config/colors";
+import Screen from "../components/Screen";
+import SearchButton from "../components/SearchButton";
 
-function HomeLoggedIn() {
-  return (
-    <Screen>
-      <View style={styles.container}>
-        <View style={styles.detailsContainer}>
-          <Text style={styles.text}>Thank you for logging into flutter!</Text>
+export default class HomeLoggedIn extends Component {
+  constructor() {
+    super();
+  }
+
+  signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.props.navigation.navigate("Login");
+        console.log("Logged out successfully");
+      });
+  };
+
+  render() {
+    return (
+      <Screen>
+        <View style={styles.container}>
+          <View style={styles.buttons}>
+            <SearchButton
+              title="Search Flights"
+              color=""
+              icon="airplane-takeoff"
+            />
+            <SearchButton title="Search Hotels" color="" icon="hotel" />
+          </View>
+          <AppButton title="Sign out" onPress={() => this.signOut()} />
         </View>
-      </View>
-      <AppButton title="Search Flights" color="medium"></AppButton>
-      <AppButton title="Search Hotels" color="medium"></AppButton>
-    </Screen>
-  );
+      </Screen>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
+  buttons: {
+    flexDirection: "row",
+  },
   container: {
     padding: 10,
-    flex: 1,
-  },
-  text: {
-    color: colors.white,
-    fontSize: 18,
     fontWeight: "bold",
-  },
-  detailsContainer: {
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 20,
+    paddingTop: 40,
   },
 });
-
-export default HomeLoggedIn;

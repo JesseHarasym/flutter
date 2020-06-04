@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Alert, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import firebase from "../../database/firebase";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -23,12 +23,13 @@ export default class Login extends Component {
       <Formik
         initialValues={{ name: "", email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           firebase
             .auth()
             .signInWithEmailAndPassword(values.email, values.password)
             .then((res) => {
               console.log(res);
+              resetForm();
               this.props.navigation.navigate("HomeLogged");
               console.log("User logged-in successfully!");
             });
@@ -45,7 +46,7 @@ export default class Login extends Component {
           <View style={styles.container}>
             <TextInput
               autoCorrect={false}
-              icon="account"
+              icon="email"
               name="name"
               placeholder="Email"
               onChangeText={handleChange("email")}
@@ -55,7 +56,7 @@ export default class Login extends Component {
             <ErrorMessage error={errors["email"]} visible={touched["email"]} />
             <TextInput
               autoCorrect={false}
-              icon="account"
+              icon="lock"
               name="name"
               placeholder="Password"
               onChangeText={handleChange("password")}
@@ -72,7 +73,12 @@ export default class Login extends Component {
             <AppButton
               onPress={() => this.props.navigation.navigate("Register")}
               color="secondary"
-              title="Need to register? click here"
+              title="Need to register?"
+            ></AppButton>
+            <AppButton
+              title="Forgot your password?"
+              color="blue"
+              onPress={() => this.props.navigation.navigate("Password")}
             ></AppButton>
           </View>
         )}
@@ -83,6 +89,7 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 20,
+    paddingTop: "45%",
   },
 });

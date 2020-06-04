@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Alert, ActivityIndicator } from "react-native";
+import { View, StyleSheet } from "react-native";
 import firebase from "../../database/firebase";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -9,8 +9,16 @@ import TextInput from "../components/TextInput";
 import ErrorMessage from "../components/ErrorMessage";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(6).label("Password"),
+  name: Yup.string().required().label("Name"),
+  email: Yup.string().required().email("Email is required").label("Email"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6)
+    .label("Password"),
+  passwordConfirmation: Yup.string().oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  ),
 });
 
 export default class Signup extends Component {
@@ -23,7 +31,7 @@ export default class Signup extends Component {
       <Formik
         initialValues={{ name: "", email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           firebase
             .auth()
             .createUserWithEmailAndPassword(values.email, values.password)
@@ -31,6 +39,7 @@ export default class Signup extends Component {
               res.user.updateProfile({
                 name: values.name,
               });
+              resetForm();
               this.props.navigation.navigate("Login");
               console.log("User registered successfully!");
             });
@@ -44,7 +53,7 @@ export default class Signup extends Component {
           touched,
           errors,
         }) => (
-          <View>
+          <View style={styles.container}>
             <TextInput
               autoCorrect={false}
               icon="account"
@@ -84,6 +93,23 @@ export default class Signup extends Component {
               error={errors["password"]}
               visible={touched["password"]}
             />
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="lock"
+              name="passwordConfirmation"
+              placeholder="Repeat Password"
+              secureTextEntry
+              textContentType="password"
+              onChangeText={handleChange("passwordConfirmation")}
+              onBlur={handleBlur("passwordConfirmation")}
+              value={values.passwordConfirmation}
+            />
+            <ErrorMessage
+              error={errors["passwordConfirmation"]}
+              visible={touched["passwordConfirmation"]}
+            />
+
             <AppButton title="Register" onPress={handleSubmit} />
             <AppButton
               title="Already Registered? Click here"
@@ -99,6 +125,7 @@ export default class Signup extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 20,
+    paddingTop: "35%",
   },
 });
