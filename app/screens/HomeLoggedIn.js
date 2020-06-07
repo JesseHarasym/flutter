@@ -21,6 +21,10 @@ export default class HomeLoggedIn extends Component {
       });
   };
 
+  searchFlights = () => {
+    this.props.navigation.navigate("SearchFlight");
+  };
+
   render() {
     return (
       <Screen>
@@ -30,6 +34,7 @@ export default class HomeLoggedIn extends Component {
               title="Search Flights"
               color=""
               icon="airplane-takeoff"
+              onPress={() => this.searchFlights()}
             />
             <SearchButton title="Search Hotels" color="" icon="hotel" />
           </View>
