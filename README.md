@@ -48,10 +48,9 @@ This application is not ready for deployment.
 
 - React
 - Expo
-- Formik
-- Yup
-
-## Build Plan
+- Python
+- Flask
+- Firebase
 
 ## Authors
 

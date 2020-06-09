@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_restful import Resource, Api
 import requests
+from datetime import timedelta, date
+from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 api = Api(app)
@@ -8,51 +10,59 @@ api = Api(app)
 
 class Flights(Resource):
     def get(self, departure, arrival):
-        locale = "en-CA"
+        flight_costs = {}
+
         country = "CA"
         currency = "CAD"
-        # departure = "YYC-sky"
-        # arrival = "YUL-sky"
-        outbound = "2020-07-17"
-        inbound = "2020-07-21"
+        locale = "en-CA"
+        inbound = ""
 
-        url = f"https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/{country}/{currency}/{locale}/{departure + '-sky'}/{arrival + '-sky'}/{outbound}/{inbound}"
+        start_date = date.today()
+        end_date = date.today() + relativedelta(months=+1)
+        delta = timedelta(days=1)
 
-        querystring = {"inboundpartialdate": inbound}
+        while start_date <= end_date:
+            outbound = start_date.strftime('%Y-%m-%d')
+            url = f"https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/" \
+                  f"{country}/{currency}/{locale}/{departure + '-sky'}/{arrival + '-sky'}/{outbound}/{inbound} "
 
-        headers = {
-            'x-rapidapi-host': "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-            'x-rapidapi-key': "f1d94c35e3msh00077622ea46cbcp17d0f1jsn5a1ee2750b53"
-        }
+            querystring = {"inboundpartialdate": inbound}
 
-        response = requests.request(
-            "GET", url, headers=headers, params=querystring)
+            headers = {
+                'x-rapidapi-host': "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+                'x-rapidapi-key': "f1d94c35e3msh00077622ea46cbcp17d0f1jsn5a1ee2750b53"
+            }
 
-        response.headers['Access-Control-Allow-Origin'] = '*'
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
 
-        data = response.json()
+            print(outbound)
 
-        quotes = data["Quotes"]
+            data = response.json()
 
-        lowest = 10000
-        avrg = 0
-        count = 0
+            quotes = data["Quotes"]
 
-        for quote in quotes:
-            if quote["MinPrice"] < lowest:
-                lowest = quote["MinPrice"]
+            lowest = 10000
+            avrg = 0
+            count = 0
 
-        for quote in quotes:
-            avrg = avrg + quote["MinPrice"]
-            count = count + 1
+            for quote in quotes:
+                if quote["MinPrice"] < lowest:
+                    lowest = quote["MinPrice"]
 
-        flight_data = avrg/count
+            for quote in quotes:
+                avrg = avrg + quote["MinPrice"]
+                count = count + 1
 
-        return jsonify({'flights': flight_data})
+            lowest_price = ((avrg/count) + lowest) / 2
+
+            flight_costs[outbound] = lowest_price
+
+            start_date += delta
+        return jsonify(flight_costs)
 
 
 api.add_resource(Flights, '/flights/<departure>/<arrival>')
-
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)

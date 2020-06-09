@@ -8,13 +8,14 @@ import RegistrationScreen from "./app/screens/RegistrationScreen";
 import HomeLoggedIn from "./app/screens/HomeLoggedIn";
 import ForgotPassword from "./app/screens/ForgotPassword";
 import SearchFlights from "./app/screens/SearchFlight";
+import CalenderScreen from "./app/screens/CalenderScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SearchFlight">
+      <Stack.Navigator initialRouteName="Calender">
         <Stack.Screen
           name="Home"
           component={WelcomeScreen}
@@ -43,6 +44,11 @@ export default function App() {
         <Stack.Screen
           name="SearchFlight"
           component={SearchFlights}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Calender"
+          component={CalenderScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
