@@ -12,37 +12,35 @@ const validationSchema = Yup.object().shape({
 });
 
 export default class SearchFlights extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state;
   }
-
   writeToServer = (values) => {
     const url = `http://10.0.2.2:5000//flights/${values.departure}/${values.arrival}`;
+
     try {
       fetch(url)
         .then((response) => response.text())
-        .then((contents) => this.sortData(contents))
-        .then(this.props.navigation.navigate("Calender"));
+        .then((contents) => this.sortData(contents));
     } catch (error) {
       console.log(error);
     }
   };
 
   sortData = (data) => {
+    const { navigate } = this.props.navigation;
     data = JSON.parse(data);
     this.setState(data);
     for (var key in this.state) {
       console.log(`Day: ${key} Price: ${this.state[key]}`);
     }
+    navigate("Calender", {
+      JSON_data: this.state,
+    });
   };
 
   render() {
-    costs = [];
-    for (var key in this.state) {
-      costs.push(`Day: ${key} Price: ${this.state[key]}\n`);
-      console.log(`Day: ${key} Price: ${this.state[key]}`);
-    }
     return (
       <Formik
         initialValues={{ departure: "", arrival: "" }}
@@ -77,10 +75,6 @@ export default class SearchFlights extends Component {
               value={values.arrival}
             />
             <AppButton title="Search" onPress={handleSubmit} />
-            <Text>
-              {costs}
-              {"\n"}
-            </Text>
           </View>
         )}
       </Formik>

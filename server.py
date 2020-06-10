@@ -17,10 +17,10 @@ class Flights(Resource):
         locale = "en-CA"
         inbound = ""
 
-        start_date = date.today()
-        end_date = date.today() + relativedelta(months=+1)
+        start_date = date.today() + relativedelta(days=+1)
+        end_date = date.today() + relativedelta(months=+2)
         delta = timedelta(days=1)
-
+        print(start_date)
         while start_date <= end_date:
             outbound = start_date.strftime('%Y-%m-%d')
             url = f"https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/" \
@@ -57,8 +57,9 @@ class Flights(Resource):
             lowest_price = ((avrg/count) + lowest) / 2
 
             flight_costs[outbound] = lowest_price
-
             start_date += delta
+
+
         return jsonify(flight_costs)
 
 
@@ -66,3 +67,5 @@ api.add_resource(Flights, '/flights/<departure>/<arrival>')
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
+
+

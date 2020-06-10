@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Calender">
+      <Stack.Navigator initialRouteName="SearchFlight">
         <Stack.Screen
           name="Home"
           component={WelcomeScreen}

@@ -1,51 +1,66 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { CalendarList } from "react-native-calendars";
 
 export default class ShowCalender extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.renderChat = this.renderChat.bind(this);
     this.state = { selectedDates: this.selectedDates() };
   }
 
+  renderChat = () => {
+    return this.props.route.params;
+  };
+
   selectedDates = () => {
     const selected = {};
-    let flightPrice = {
-      "2020-06-09": "30",
-      "2020-06-10": "203",
-      "2020-06-11": "420",
-      "2020-06-12": "30",
-    };
     let initialArr = [];
-    for (var key in flightPrice) {
+    let flightData;
+    let flightPriceRender = this.renderChat();
+    let temp;
+    for (var key in flightPriceRender) {
+      temp = flightPriceRender[key];
+    }
+    for (let [key, value] of Object.entries(temp)) {
+      flightData = {
+        date: key,
+        price: value,
+      };
+      // initialArr.push(flightData);
+    }
+    for (let [key, value] of Object.entries(temp)) {
       let color = "";
-      if (flightPrice[key] < 100) {
+      if (value < 180) {
         color = "green";
       }
-      if ((flightPrice[key] > 100) & (flightPrice[key] < 300)) {
+      if ((value > 180) & (value < 250)) {
         color = "yellow";
       }
-      if (flightPrice[key] >= 300) {
+      if (value >= 250) {
         color = "red";
       }
       let flight = {
         date: key,
-        price: color,
+        color: color,
+        price: value,
       };
       initialArr.push(flight);
     }
     initialArr.forEach((item) => {
       selected[item.date] = {
         selected: true,
-        selectedColor: item.price,
+        selectedColor: item.color,
       };
     });
+    console.log(initialArr);
     return JSON.parse(JSON.stringify(selected));
   };
 
   render() {
     return (
       <View style={styles.container}>
+        <Text>{}</Text>
         <CalendarList
           pastScrollRange={0}
           futureScrollRange={9}
