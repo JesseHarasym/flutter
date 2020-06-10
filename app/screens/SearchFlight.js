@@ -17,8 +17,9 @@ export default class SearchFlights extends Component {
     this.state;
   }
   writeToServer = (values) => {
-    const url = `http://10.0.2.2:5000//flights/${values.departure}/${values.arrival}`;
-
+    let departure = values.departure.toUpperCase();
+    let arrival = values.arrival.toUpperCase();
+    const url = `http://10.0.2.2:5000//flights/${departure}/${arrival}`;
     try {
       fetch(url)
         .then((response) => response.text())
@@ -29,6 +30,7 @@ export default class SearchFlights extends Component {
   };
 
   sortData = (data) => {
+    console.log(data);
     const { navigate } = this.props.navigation;
     data = JSON.parse(data);
     this.setState(data);

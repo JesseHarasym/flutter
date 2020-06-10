@@ -18,6 +18,7 @@
     "expo-google-sign-in": "~8.1.0",
     "firebase": "^7.14.6",
     "formik": "^2.1.4",
+    "kiwi-api": "^0.3.0",
     "moment": "^2.26.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
