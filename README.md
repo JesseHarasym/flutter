@@ -1,6 +1,6 @@
-# flutter
+# FlightCheckr
 
-# Flutter: A way to find the cheapest flights
+# FlightCheckr: A way to find the cheapest flights
 
 This will be a cross-platform app made with React Native, which will allow users to register, login and use the search function to find the flight destination on the date of their choice. The user will be presented with a screen indicating the lowest cost available for the searched flight, and a calender indicating how the price compares to other flights for the same destination on different dates.
 
