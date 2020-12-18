@@ -51,7 +51,3 @@ This application is not ready for deployment.
 - Python
 - Flask
 - Firebase
-
-## Authors
-
-- **Jesse Harasym** - _Initial work_ - (https://github.com/JesseHarasym)
