@@ -46,7 +46,7 @@ This application is not ready for deployment.
 
 ## Built With
 
-- React
+- React Native
 - Expo
 - Python
 - Flask
